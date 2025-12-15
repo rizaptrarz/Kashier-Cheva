@@ -1,4 +1,4 @@
-package org.chevalierlabsas.kashier
+package org.chevalierlabsas.kashier.core
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -18,6 +18,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import kashier.composeapp.generated.resources.Res
 import kashier.composeapp.generated.resources.compose_multiplatform
+import org.chevalierlabsas.kashier.Greeting
 
 @Composable
 @Preview
