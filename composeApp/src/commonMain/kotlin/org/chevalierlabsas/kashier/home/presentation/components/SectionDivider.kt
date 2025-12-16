@@ -17,33 +17,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// Hilangkan 'class SectionDivider {}' yang kosong, ganti dengan fungsi Composable
 
 @Composable
 fun SectionDivider(
     title: String,
-    isContentVisible: Boolean, // Status apakah konten di bawah divider terlihat
-    onToggleVisibility: () -> Unit, // Lambda untuk aksi tampilkan/sembunyikan
+    isContentVisible: Boolean,
+    onToggleVisibility: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Row sebagai container utama untuk divider
+
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onToggleVisibility) // Seluruh divider bisa diklik untuk toggle
+            .clickable(onClick = onToggleVisibility)
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween, // Pisahkan Judul dan Icon
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Teks Judul (e.g., "Semua barang")
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            // Menggunakan warna onSurface sesuai rekomendasi tugas
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        // Icon Panah (menunjukkan status tampil/sembunyi)
         Icon(
             imageVector = if (isContentVisible) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
             contentDescription = "Toggle Visibility for $title",
@@ -52,14 +48,13 @@ fun SectionDivider(
     }
 }
 
-// Tambahkan Preview untuk melihat hasilnya
 @Preview
 @Composable
 private fun SectionDividerPreviewVisible() {
     MaterialTheme {
         SectionDivider(
             title = "Semua barang",
-            isContentVisible = true, // Tampilkan panah ke atas
+            isContentVisible = true,
             onToggleVisibility = {}
         )
     }
@@ -71,7 +66,7 @@ private fun SectionDividerPreviewHidden() {
     MaterialTheme {
         SectionDivider(
             title = "Semua barang",
-            isContentVisible = false, // Tampilkan panah ke bawah
+            isContentVisible = false,
             onToggleVisibility = {}
         )
     }
