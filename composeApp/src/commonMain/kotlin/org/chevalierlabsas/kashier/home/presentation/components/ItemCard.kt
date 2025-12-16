@@ -16,16 +16,14 @@ import androidx.compose.ui.unit.dp
 import org.chevalierlabsas.kashier.home.domain.Item
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// Hilangkan 'class ItemCard {}' yang kosong, ganti dengan fungsi Composable
 
 @Composable
 fun ItemCard(
     item: Item,
-    onAddClick: (Item) -> Unit, // Lambda untuk aksi tambah (+)
-    onEditClick: (Item) -> Unit, // Lambda untuk aksi edit (pensil)
+    onAddClick: (Item) -> Unit,
+    onEditClick: (Item) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Row sebagai container, menggunakan warna secondaryContainer
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -33,27 +31,22 @@ fun ItemCard(
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Kolom untuk Nama dan Harga
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            // Nama Barang
             Text(
                 text = item.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
             Spacer(modifier = Modifier.height(4.dp))
-            // Harga Barang
             Text(
-                // Catatan: Format harga harus disesuaikan untuk tampilan mata uang yang benar
                 text = "Rp. ${item.price}",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
 
-        // --- Tombol Edit ---
         IconButton(
             onClick = { onEditClick(item) }
         ) {
@@ -66,28 +59,25 @@ fun ItemCard(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // --- Tombol Tambah ---
         IconButton(
             onClick = { onAddClick(item) },
-            // Menggunakan warna sekunder untuk latar belakang tombol
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.small)
-                .size(32.dp) // Ukuran tombol kecil
+                .size(32.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Add Item",
-                tint = MaterialTheme.colorScheme.onSecondary // Warna ikon di atas warna secondary
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
     }
 }
 
-// Tambahkan Preview untuk melihat hasilnya
 @Preview
 @Composable
 private fun ItemCardPreview() {
-    val dummyItem = org.chevalierlabsas.kashier.home.domain.Item( // Gunakan Item dengan Package Penuh
+    val dummyItem = org.chevalierlabsas.kashier.home.domain.Item(
         id = 1,
         userId = 101,
         name = "Telur 0.5 KG",
@@ -96,8 +86,8 @@ private fun ItemCardPreview() {
     MaterialTheme {
         ItemCard(
             item = dummyItem,
-            onAddClick = { /* Do nothing */ },
-            onEditClick = { /* Do nothing */ }
+            onAddClick = {  },
+            onEditClick = {  }
         )
     }
 }
