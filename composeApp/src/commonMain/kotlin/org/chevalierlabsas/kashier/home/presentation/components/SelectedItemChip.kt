@@ -1,3 +1,4 @@
+package org.chevalierlabsas.kashier.home.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.chevalierlabsas.kashier.home.data.DummyDataSource
 import org.chevalierlabsas.kashier.home.domain.Item
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SelectedItemChip(
@@ -44,5 +47,17 @@ fun SelectedItemChip(
                 }
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun SelectedItemChipPreview() {
+    Surface {
+        SelectedItemChip(
+            onRemove = { },
+            item = DummyDataSource().getData().first(),
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }

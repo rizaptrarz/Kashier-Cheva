@@ -20,20 +20,19 @@ fun SectionDivider(
     onAction: (visibility: Boolean) -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurface
+            style = MaterialTheme.typography.labelLarge
         )
         Spacer(modifier = Modifier.width(12.dp))
         Box(
             modifier = Modifier
                 .weight(1f)
-                .height(1.dp)
-                .background(MaterialTheme.colorScheme.onSurface)
+                .height(2.dp)
+                .background(MaterialTheme.colorScheme.onBackground)
         )
         Spacer(modifier = Modifier.width(4.dp))
         IconButton(
@@ -41,22 +40,21 @@ fun SectionDivider(
         ) {
             Icon(
                 imageVector = if (visible) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                contentDescription = "Expand"
+                contentDescription = if (visible) "Collapse" else "Expand"
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun SectionDividerPreview() {
     Surface {
-        Box(modifier = Modifier.padding(16.dp)) {
-            SectionDivider(
-                title = "Semua barang",
-                visible = false,
-                onAction = { }
-            )
-        }
+        SectionDivider(
+            modifier = Modifier.padding(start = 16.dp, end = 4.dp),
+            title = "Barang Terpilih",
+            visible = false,
+            onAction = { _ -> }
+        )
     }
 }
