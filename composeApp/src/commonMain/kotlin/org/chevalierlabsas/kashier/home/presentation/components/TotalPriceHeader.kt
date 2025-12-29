@@ -1,9 +1,6 @@
 package org.chevalierlabsas.kashier.home.presentation.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -22,16 +19,15 @@ fun TotalPriceHeader(
     modifier: Modifier = Modifier,
     totalPrice: Double,
 ) {
-    Column (
+    Column(
         modifier = modifier,
-    ){
+    ) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(Res.string.total_price_label),
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Start
         )
-
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = "Rp. $totalPrice",
@@ -46,7 +42,9 @@ fun TotalPriceHeader(
 fun TotalPriceHeaderPreview() {
     Surface {
         TotalPriceHeader(
-            totalPrice = 100000.0
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
+            totalPrice = 100000.00
         )
     }
 }
