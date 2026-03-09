@@ -15,15 +15,15 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Searchbar(
+fun SearchBar(
     modifier: Modifier = Modifier,
-    query: String,
-    onQueryChange: (String) -> Unit
+    value: String,
+    onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField(
         modifier = modifier,
-        value = query,
-        onValueChange = onQueryChange,
+        value = value,
+        onValueChange = onValueChange,
         shape = RoundedCornerShape(8.dp),
         placeholder = {
             Text(stringResource(Res.string.searchbar_hint))
@@ -49,12 +49,12 @@ fun Searchbar(
 
 @Preview
 @Composable
-fun SearchbarPreview() {
+fun SearchBarPreview() {
     Surface {
-        Searchbar(
+        SearchBar(
             modifier = Modifier.padding(16.dp),
-            query = "",
-            onQueryChange = {}
+            value = "",
+            onValueChange = {}
         )
     }
 }

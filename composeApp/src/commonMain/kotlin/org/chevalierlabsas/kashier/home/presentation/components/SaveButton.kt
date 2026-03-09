@@ -11,22 +11,30 @@ import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.Res
 import kashier.composeapp.generated.resources.save_button_label
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SaveButton(
     modifier: Modifier = Modifier,
     onSave: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean = true,
 ) {
     Button(
         modifier = modifier,
         onClick = onSave,
+        enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
         )
-    ){
+    ) {
         Text(stringResource(Res.string.save_button_label))
     }
+}
+
+@Preview
+@Composable
+fun SaveButtonPreview() {
+    SaveButton(onSave = { })
 }

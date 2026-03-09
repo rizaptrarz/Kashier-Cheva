@@ -10,30 +10,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
 import org.chevalierlabsas.kashier.home.data.DummyDataSource
-import org.chevalierlabsas.kashier.home.domain.Item
 import org.chevalierlabsas.kashier.home.presentation.components.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-
-    var totalPrice by remember { mutableStateOf(0.00) }
-    val selectedItems = remember { mutableStateListOf<Item>() }
-    var showSelectedItem by remember { mutableStateOf(true) }
-    var showAllItem by remember { mutableStateOf(true) }
-
-    var searchQuery by remember { mutableStateOf("") }
-    val allItems = remember { DummyDataSource().getData() }
-    val filteredItems = allItems.filter {
-        it.name.contains(searchQuery, ignoreCase = true)
-    }
+fun HomeScreen(
+    state: HomeState,
+    onEvent: (HomeEvent) -> Unit,
+) {
 
     Scaffold(
         topBar = {
@@ -58,7 +49,7 @@ fun HomeScreen() {
             item {
                 TotalPriceHeader(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    totalPrice = totalPrice
+                    totalPrice = state.totalPrice
                 )
             }
             item {
@@ -67,22 +58,22 @@ fun HomeScreen() {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     onSave = { TODO("Save data.") },
-                    enabled = selectedItems.isNotEmpty() && totalPrice > 0.00
+                    enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
                 )
             }
             item {
-                SectionDivider(
+                HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.selected_item_label),
-                    visible = showSelectedItem,
+                    visible = state.showSelectedItem,
                     onAction = { visible ->
-                        showSelectedItem = visible
+                        onEvent(HomeEvent.OnSelectedItemVisibilityChange(visible))
                     }
                 )
             }
             item {
                 AnimatedVisibility(
-                    visible = showSelectedItem,
+                    visible = state.showSelectedItem,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
@@ -91,11 +82,10 @@ fun HomeScreen() {
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         content = {
-                            selectedItems.map { item ->
+                            state.selectedItems.map { item ->
                                 SelectedItemChip(
                                     onRemove = {
-                                        selectedItems.remove(item)
-                                        totalPrice -= item.price
+                                        onEvent(HomeEvent.OnRemoveItem(item))
                                     },
                                     item = item,
                                     modifier = Modifier.padding(horizontal = 4.dp)
@@ -106,27 +96,27 @@ fun HomeScreen() {
                 }
             }
             item {
-                SectionDivider(
+                HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.all_item_label),
-                    visible = showAllItem,
+                    visible = state.showAllItem,
                     onAction = { visible ->
-                        showAllItem = visible
+                        onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
                     }
                 )
             }
+
             item {
-                Searchbar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    query = searchQuery,
-                    onQueryChange = { searchQuery = it }
+                SearchBar(
+                    modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                    value = state.searchQuery,
+                    onValueChange = { onEvent(HomeEvent.OnSearchQueryChange(it)) }
                 )
             }
-            items(filteredItems) { item ->
+
+            items(DummyDataSource().getData()) { item ->
                 AnimatedVisibility(
-                    visible = showAllItem,
+                    visible = state.showAllItem,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -135,8 +125,7 @@ fun HomeScreen() {
                         item = item,
                         onEdit = { },
                         onAdd = {
-                            selectedItems.add(it)
-                            totalPrice += it.price
+                            onEvent(HomeEvent.OnAddItem(item))
                         }
                     )
                 }
@@ -148,5 +137,8 @@ fun HomeScreen() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        state = HomeState(),
+        onEvent = {  }
+    )
 }
