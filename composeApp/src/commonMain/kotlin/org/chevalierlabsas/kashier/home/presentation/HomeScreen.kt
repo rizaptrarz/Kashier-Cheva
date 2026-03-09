@@ -10,14 +10,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
-import org.chevalierlabsas.kashier.home.data.DummyDataSource
+import kotlinx.coroutines.launch
+import org.chevalierlabsas.kashier.home.domain.Item
 import org.chevalierlabsas.kashier.home.presentation.components.*
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,6 +25,20 @@ fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showSheet by remember { mutableStateOf(false) }
+
+    var selectedItemForEdit by remember { mutableStateOf<Item?>(null) }
+
+    val closeSheet: () -> Unit = {
+        scope.launch { sheetState.hide() }.invokeOnCompletion {
+            if (!sheetState.isVisible) {
+                showSheet = false
+                selectedItemForEdit = null
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -36,7 +50,10 @@ fun HomeScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { TODO("Add Item.") },
+                onClick = {
+                    selectedItemForEdit = null
+                    showSheet = true
+                },
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
                 icon = { Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_item_fab_label)) }
@@ -57,7 +74,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    onSave = { TODO("Save data.") },
+                    onSave = { onEvent(HomeEvent.OnSaveTransaction) },
                     enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
                 )
             }
@@ -114,7 +131,7 @@ fun HomeScreen(
                 )
             }
 
-            items(DummyDataSource().getData()) { item ->
+            items(state.items) { item ->
                 AnimatedVisibility(
                     visible = state.showAllItem,
                     enter = fadeIn(),
@@ -123,7 +140,10 @@ fun HomeScreen(
                     ItemCard(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         item = item,
-                        onEdit = { },
+                        onEdit = {
+                            selectedItemForEdit = it
+                            showSheet = true
+                        },
                         onAdd = {
                             onEvent(HomeEvent.OnAddItem(item))
                         }
@@ -132,13 +152,16 @@ fun HomeScreen(
             }
         }
     }
-}
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(
-        state = HomeState(),
-        onEvent = {  }
-    )
+    if (showSheet) {
+        ItemFormBottomSheet(
+            item = selectedItemForEdit,
+            sheetState = sheetState,
+            onDismiss = { showSheet = false },
+            onSave = { nama, harga ->
+                println("Data Tersimpan: $nama dengan harga $harga")
+                closeSheet()
+            }
+        )
+    }
 }
