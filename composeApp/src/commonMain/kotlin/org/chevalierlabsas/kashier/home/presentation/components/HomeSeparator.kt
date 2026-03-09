@@ -10,10 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kashier.composeapp.generated.resources.Res
+import kashier.composeapp.generated.resources.expand_desc
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun SectionDivider(
+fun HomeSeparator(
     modifier: Modifier = Modifier,
     title: String,
     visible: Boolean,
@@ -29,8 +32,7 @@ fun SectionDivider(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Box(
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
                 .height(2.dp)
                 .background(MaterialTheme.colorScheme.onBackground)
         )
@@ -40,7 +42,7 @@ fun SectionDivider(
         ) {
             Icon(
                 imageVector = if (visible) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                contentDescription = if (visible) "Collapse" else "Expand"
+                contentDescription = stringResource(Res.string.expand_desc)
             )
         }
     }
@@ -48,13 +50,13 @@ fun SectionDivider(
 
 @Preview
 @Composable
-fun SectionDividerPreview() {
+fun HomeSeparatorPreview() {
     Surface {
-        SectionDivider(
+        HomeSeparator(
             modifier = Modifier.padding(start = 16.dp, end = 4.dp),
             title = "Barang Terpilih",
             visible = false,
-            onAction = { _ -> }
+            onAction = { visible -> }
         )
     }
 }
